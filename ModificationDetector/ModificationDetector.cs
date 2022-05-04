@@ -12,9 +12,7 @@ namespace ModificationDetector
             public bool? ExactlyModified { get; private set; }
 
             public ExactlyModifiedChangedEventArgs(bool? exactlyModified)
-            {
-                ExactlyModified = exactlyModified;
-            }
+                => ExactlyModified = exactlyModified;
         }
         public delegate void ExactlyModifiedChangedEventHander(object sender, ExactlyModifiedChangedEventArgs e);
         public event ExactlyModifiedChangedEventHander? ExactlyModifiedChanged;
@@ -24,9 +22,7 @@ namespace ModificationDetector
             public bool IsModificationDetecting { get; private set; }
 
             public IsModificationDetectingChangedEventArgs(bool isModificationDetecting)
-            {
-                IsModificationDetecting = isModificationDetecting;
-            }
+                => IsModificationDetecting = isModificationDetecting;
         }
         public delegate void IsModificationDetectingChangedEventHander(object sender, IsModificationDetectingChangedEventArgs e);
         public event IsModificationDetectingChangedEventHander? IsModificationDetectingChanged;
@@ -103,14 +99,8 @@ namespace ModificationDetector
             ExactlyModifiedCount = 0;
             IsModificationDetecting = true;
 
-            if (IsModificationDetectingChanged is not null)
-            {
-                IsModificationDetectingChanged(this, new IsModificationDetectingChangedEventArgs(true));
-            }
-            if (ExactlyModifiedChanged is not null)
-            {
-                ExactlyModifiedChanged(this, new ExactlyModifiedChangedEventArgs(false));
-            }
+            IsModificationDetectingChanged?.Invoke(this, new IsModificationDetectingChangedEventArgs(true));
+            ExactlyModifiedChanged?.Invoke(this, new ExactlyModifiedChangedEventArgs(false));
         }
         /// <summary>
         /// 登録済みプロパティの現在値を再取得する。
@@ -129,9 +119,9 @@ namespace ModificationDetector
             }
             ExactlyModifiedCount = 0;
 
-            if (ExactlyModifiedChanged is not null && prevCount != 0)
+            if (prevCount != 0)
             {
-                ExactlyModifiedChanged(this, new ExactlyModifiedChangedEventArgs(false));
+                ExactlyModifiedChanged?.Invoke(this, new ExactlyModifiedChangedEventArgs(false));
             }
         }
         /// <summary>
@@ -151,9 +141,9 @@ namespace ModificationDetector
             }
             ExactlyModifiedCount = 0;
 
-            if (ExactlyModifiedChanged is not null && prevCount != 0)
+            if (prevCount != 0)
             {
-                ExactlyModifiedChanged(this, new ExactlyModifiedChangedEventArgs(false));
+                ExactlyModifiedChanged?.Invoke(this, new ExactlyModifiedChangedEventArgs(false));
             }
         }
         /// <summary>
@@ -168,14 +158,8 @@ namespace ModificationDetector
 
             IsModificationDetecting = false;
 
-            if (ExactlyModifiedChanged is not null)
-            {
-                ExactlyModifiedChanged(this, new ExactlyModifiedChangedEventArgs(null));
-            }
-            if (IsModificationDetectingChanged is not null)
-            {
-                IsModificationDetectingChanged(this, new IsModificationDetectingChangedEventArgs(false));
-            }
+            ExactlyModifiedChanged?.Invoke(this, new ExactlyModifiedChangedEventArgs(null));
+            IsModificationDetectingChanged?.Invoke(this, new IsModificationDetectingChangedEventArgs(false));
         }
 
         /// <summary>
@@ -207,10 +191,7 @@ namespace ModificationDetector
 
                 if ((ExactlyModifiedCount == 1 && delta > 0) || ExactlyModifiedCount == 0)
                 {
-                    if (ExactlyModifiedChanged is not null)
-                    {
-                        ExactlyModifiedChanged(this, new ExactlyModifiedChangedEventArgs(ExactlyModifiedCount > 0));
-                    }
+                    ExactlyModifiedChanged?.Invoke(this, new ExactlyModifiedChangedEventArgs(ExactlyModifiedCount > 0));
                 }
             }
         }
