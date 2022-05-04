@@ -10,14 +10,14 @@ namespace ModificationDetectorSample
         private bool? _ExactlyModified = null;
         public bool? ExactlyModified
         {
-            get { return _ExactlyModified; }
-            set { SetProperty(ref _ExactlyModified, value); }
+            get => _ExactlyModified;
+            set => SetProperty(ref _ExactlyModified, value);
         }
 
         private string? _txtString = null;
         public string? txtString
         {
-            get { return _txtString; }
+            get => _txtString;
             set
             {
                 if (SetProperty(ref _txtString, value))
@@ -30,7 +30,7 @@ namespace ModificationDetectorSample
         private int? _txtInt = null;
         public int? txtInt
         {
-            get { return _txtInt; }
+            get => _txtInt;
             set
             {
                 if (SetProperty(ref _txtInt, value))
@@ -60,7 +60,7 @@ namespace ModificationDetectorSample
         private Number _cbxSelectedValue;
         public Number cbxSelectedValue
         {
-            get { return _cbxSelectedValue; }
+            get => _cbxSelectedValue;
             set
             {
                 if (SetProperty(ref _cbxSelectedValue, value))
@@ -73,10 +73,11 @@ namespace ModificationDetectorSample
         public class Item : ObservableObject
         {
             public string Name { get; set; } = string.Empty;
+
             private bool _IsSelected = false;
             public bool IsSelected
             {
-                get { return _IsSelected; }
+                get => _IsSelected;
                 set
                 {
                     if (SetProperty(ref _IsSelected, value))
@@ -85,6 +86,7 @@ namespace ModificationDetectorSample
                     }
                 }
             }
+
             private ModificationDetector.ModificationDetector detector;
 
             public Item(string name, ModificationDetector.ModificationDetector detector)
@@ -128,10 +130,10 @@ namespace ModificationDetectorSample
             txtInt = 0;
             //cbxSelectedValue = Number.One;
 
-            Start = new RelayCommand(() => detector.StartModificationDetecting(), () => !detector.IsModificationDetecting);
-            Restart = new RelayCommand(() => detector.RestartModificationDetecting(), () => detector.IsModificationDetecting);
-            Stop = new RelayCommand(() => detector.StopModificationDetecting(), () => detector.IsModificationDetecting);
-            Restore = new RelayCommand(() => detector.Restore(), () => detector.IsModificationDetecting);
+            Start = new RelayCommand(detector.StartModificationDetecting, () => !detector.IsModificationDetecting);
+            Restart = new RelayCommand(detector.RestartModificationDetecting, () => detector.IsModificationDetecting);
+            Stop = new RelayCommand(detector.StopModificationDetecting, () => detector.IsModificationDetecting);
+            Restore = new RelayCommand(detector.Restore, () => detector.IsModificationDetecting);
         }
     }
 }
